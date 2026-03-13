@@ -2,6 +2,9 @@ import userModel from '../models/user.model.js'
 import jwt from 'jsonwebtoken'
 import { sendEmail } from '../services/mail.service.js'
 
+/**
+ * @desc Controller for registration
+ */
 export async function registerController(req, res) {
     const { username, email, password } = req.body
 
@@ -47,6 +50,9 @@ export async function registerController(req, res) {
     });
 }
 
+/**
+ * @desc Controller for email verification
+ */
 export async function verfiyEmailController(req, res) {
     const { token } = req.query
 
