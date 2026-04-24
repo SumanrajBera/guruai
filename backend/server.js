@@ -1,16 +1,7 @@
-import "dotenv/config";
-import { app } from "./src/app.js";
-import connectDB from "./src/config/database.js";
-import { testAi } from "./src/services/ai.service.js";
+import app from "./src/app.js";
+import connectToDB from "./src/config/database.js";
 
-// testAi()
-
-connectDB()
-    .catch((err) => {
-        console.error("MongoDB connection failed:", err);
-        process.exit(1);
-    });
-
+connectToDB()
 app.listen(3000, () => {
-    console.log("Server is listening on port 3000");
+    console.log("Server is running on port 3000");
 })
