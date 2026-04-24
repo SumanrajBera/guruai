@@ -1,0 +1,36 @@
+import mongoose from 'mongoose'
+import brcypt from 'bcryptjs'
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true,
+        select: false
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    }
+})
+
+userSchema.pre("save", function () {
+    if (!this.isModified('password')) return
+    this.password = await brcypt.hash(this.password, 10)
+})
+
+userSchema.methods.comparePassword = function (password) {
+    return bcrypt.compare(password, this.password)
+}
+
+const userModel = mongoose.model("USER", userSchema)
+
+export default userModel;
