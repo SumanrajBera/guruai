@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-userSchema.pre("save", function () {
+userSchema.pre("save", async function () {
     if (!this.isModified('password')) return
     this.password = await brcypt.hash(this.password, 10)
 })
