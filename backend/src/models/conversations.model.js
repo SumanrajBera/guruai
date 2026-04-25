@@ -9,7 +9,7 @@ const convSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "USER",
-
+        required: true
     }
 }, { timestamps: true })
 
