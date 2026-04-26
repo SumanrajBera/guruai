@@ -13,6 +13,8 @@ const convSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
+convSchema.index({ user: 1, updatedAt: -1 })
+
 const convModel = mongoose.model("CONVO", convSchema);
 
 export default convModel;
