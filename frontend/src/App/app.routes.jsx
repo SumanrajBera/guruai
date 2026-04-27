@@ -10,6 +10,10 @@ const router = createBrowserRouter([
         element: <Protected />,
         children: [
             {
+                path: "/",
+                element: <Dashboard />
+            },
+            {
                 path: "/dashboard",
                 element: <Dashboard />
             }
