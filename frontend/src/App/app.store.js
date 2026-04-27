@@ -3,7 +3,7 @@ import userDets from "../Auth/state/auth.state.js"
 
 const store = configureStore({
     reducer: {
-        user: userDets
+        auth: userDets
     }
 })
 

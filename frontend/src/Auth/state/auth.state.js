@@ -4,7 +4,7 @@ const userDets = createSlice({
     name: "user",
     initialState: {
         user: null,
-        isLoading: false
+        isLoading: true
     },
     reducers: {
         setUser: (state, action) => {

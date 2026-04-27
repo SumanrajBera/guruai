@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import '../styles/Auth.css';
 import '../styles/Registration.css';
+import useAuth from '../hooks/auth'
 
 export default function Registration() {
+  const { registerUser } = useAuth();
   const navigate = useNavigate();
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleRegister = (e) => {
     e.preventDefault();
-    navigate('/verify-email');
+    registerUser(username, email, password)
   };
 
   return (
@@ -25,6 +30,7 @@ export default function Registration() {
             label="Username"
             type="text"
             placeholder="JaneDoe"
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <Input
@@ -32,6 +38,7 @@ export default function Registration() {
             label="Email Address"
             type="email"
             placeholder="name@example.com"
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <Input
@@ -39,6 +46,7 @@ export default function Registration() {
             label="Password"
             type="password"
             placeholder="••••••••"
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
 

@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import '../styles/Auth.css';
 import '../styles/Login.css';
+import useAuth from '../hooks/auth';
 
 export default function Login() {
   const navigate = useNavigate();
+  const [identifier, setidentifier] = useState()
+  const [password, setPassword] = useState()
+  const { loginUser } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate('/verify-email');
+    loginUser(identifier, password)
   };
 
   return (
@@ -24,7 +28,8 @@ export default function Login() {
             id="email"
             label="Email Address or Username"
             type="text"
-            placeholder="name@example.com"
+            placeholder="name@example.com or johndoe"
+            onChange={(e) => setidentifier(e.target.value)}
             required
           />
           <Input
@@ -32,12 +37,13 @@ export default function Login() {
             label="Password"
             type="password"
             placeholder="••••••••"
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
 
-          <div className="login-forgot">
+          {/* <div className="login-forgot">
             <a href="#">Forgot password?</a>
-          </div>
+          </div> */}
 
           <Button type="submit" fullWidth>
             Sign In

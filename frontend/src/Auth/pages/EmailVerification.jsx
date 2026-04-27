@@ -1,10 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Button from '../../components/Button';
 import '../styles/Auth.css';
 import '../styles/EmailVerification.css';
+import useAuth from '../hooks/auth';
 
 export default function EmailVerification() {
+  const navigate = useNavigate()
+  const { verfiyEmail } = useAuth()
+  const { identifier } = useParams()
+  function resendEmail() {
+    verfiyEmail(identifier)
+  }
   return (
     <div className="auth-wrapper">
       <div className="auth-container verification-content">
@@ -21,7 +28,7 @@ export default function EmailVerification() {
           Your account has not been verified yet. We've sent a verification link to your email address. Please click the link to activate your account.
         </p>
 
-        <Button onClick={() => alert('Verification email resent!')} fullWidth>
+        <Button onClick={() => { resendEmail() }} fullWidth>
           Resend Verification Email
         </Button>
 
