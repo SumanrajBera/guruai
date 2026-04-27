@@ -3,6 +3,7 @@ import userModel from "../models/auth.model.js";
 import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
 import sendEmail from "../utils/sendEmail.js";
+import { verifyUser } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
@@ -29,9 +30,12 @@ router.post("/register", async (req, res) => {
             ]
         })
 
-        if (exists) return res.status(400).json({
-            message: "User with such email or username already exists"
-        })
+        if (exists) {
+            return res.status(400).json({
+                message: `User with such email or username already exists.`,
+                isVerified: exists.isVerified
+            })
+        }
 
         const user = await userModel.create({ username, email, password })
 
@@ -62,7 +66,8 @@ router.post("/login", async (req, res) => {
         })
 
         if (!user.isVerified) return res.status(409).json({
-            message: "Please verify your email"
+            message: "Please verify your email",
+            isVerified: false
         })
 
         const isCorrect = await user.comparePassword(password);
@@ -113,6 +118,56 @@ router.get("/verify-email", async (req, res) => {
         })
 
     } catch (error) {
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+})
+
+router.post("/resend", async (req, res) => {
+    try {
+        const { identifier } = req.body;
+
+        const exists = await userModel.findOne({
+            $or: [
+                { username: identifier }, { email: identifier }
+            ]
+        })
+
+        if (!exists) return res.status(400).json({
+            message: "Invalid request. Please register!"
+        })
+
+        if (exists.isVerified) return res.status(400).json({
+            message: "Email is already verified. Please login!",
+            isVerified: true
+        })
+
+        await sendEmail(exists)
+
+        return res.status(200).json({
+            message: "Email sent successfully."
+        })
+
+    } catch (err) {
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+})
+
+router.get("/getMe", verifyUser, async (req, res) => {
+    try {
+        const user = await userModel.findById(req.id)
+
+        if (!user) return res.status(400).json({
+            message: "Please Login!"
+        })
+
+        return res.status(200).json({
+            username: user.username
+        })
+    } catch (err) {
         return res.status(500).json({
             message: "Internal Server Error"
         })
