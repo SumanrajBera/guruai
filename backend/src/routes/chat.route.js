@@ -127,4 +127,37 @@ router.post("/retry", verifyUser, async (req, res) => {
     }
 })
 
+/**
+ * @description For chat history
+ */
+router.get("/chatHistory", verifyUser, async (req, res) => {
+    try {
+        const { convId, lt: ltQuery } = req.query
+
+        if (!convId) return res.status(400).json({ message: "convId is required" })
+
+        const lt = ltQuery ? new Date(ltQuery) : new Date()
+
+        const conversation = await convModel.findById(convId)
+
+        if (!conversation) return res.status(404).json({ message: "Conversation not found" })
+
+        if (conversation.user.toString() !== req.id) return res.status(403).json({ message: "Unauthorized" })
+
+        const chats = await chatModel
+            .find({ conversationId: convId, createdAt: { $lt: lt } })
+            .sort({ createdAt: -1 })
+            .limit(20)
+
+        chats.reverse()
+
+        return res.status(200).json({
+            message: "Fetched all chats",
+            chats
+        })
+    } catch (err) {
+        return res.status(500).json({ message: "Internal Server Error" })
+    }
+})
+
 export default router;
