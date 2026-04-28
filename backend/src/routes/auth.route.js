@@ -13,7 +13,12 @@ function sendToken(user, status, message, res) {
         username: user.username
     }, config.JWT_SECRET, { expiresIn: '7d' })
 
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    })
 
     return res.status(status).json({
         message
@@ -172,6 +177,18 @@ router.get("/getMe", verifyUser, async (req, res) => {
             message: "Internal Server Error"
         })
     }
+})
+
+router.post("/logout", async (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax"
+    })
+
+    return res.status(200).json({
+        message: "Logged out"
+    })
 })
 
 export default router;

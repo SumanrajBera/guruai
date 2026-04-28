@@ -7,6 +7,28 @@ import chatModel from '../models/chats.model.js';
 const router = Router()
 
 /**
+ * @description For conversation history
+ */
+
+router.get("/conversationHistory", verifyUser, async (req, res) => {
+    try {
+        const id = req.id;
+        const lt = req.query.lt ? new Date(req.query.lt) : new Date()
+        const conversations = await convModel.find({ user: id, updatedAt: { $lt: lt } }).sort({ updatedAt: -1 }).limit(10);
+
+        return res.status(200).json({
+            message: "Fetched all conversation",
+            conversations
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+})
+
+/**
  * @description For conversation
  */
 router.post("/conversation", verifyUser, async (req, res) => {
@@ -28,19 +50,36 @@ router.post("/conversation", verifyUser, async (req, res) => {
             message: "Conversation was either deleted or doesn't exist."
         })
 
-        await chatModel.create({ conversationId: conversation._id, role: "human", content: message })
+        if (conversation.user.toString() !== req.id) return res.status(403).json({
+            message: "Unauthorized access to this conversation"
+        })
 
-        const response = await generateResponse(conversation._id, message)
-
-        await chatModel.create({ conversationId: conversation._id, role: "ai", content: response })
-
+        const humanChat = await chatModel.create({ conversationId: conversation._id, role: "human", content: message })
         conversation.updatedAt = Date.now()
         await conversation.save()
 
+        let response, aiChat;
+        try {
+            response = await generateResponse(conversation._id, message)
+            aiChat = await chatModel.create({ conversationId: conversation._id, role: "ai", content: response });
+        } catch (err) {
+            return res.status(200).json({
+                convId: conversation._id,
+                title: conversation.title,
+                updatedAt: conversation.updatedAt,
+                chats: [humanChat],
+                error: "AI failed to respond. Please retry."
+            })
+        }
+
         return res.status(200).json({
             message: "Your response is ready",
+            convId: conversation._id,
             title: conversation.title,
-            response
+            updatedAt: conversation.updatedAt,
+            chats: [
+                humanChat, aiChat
+            ]
         })
     } catch (error) {
         console.log(error)
