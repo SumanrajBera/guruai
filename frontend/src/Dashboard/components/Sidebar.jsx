@@ -3,8 +3,9 @@ import '../styles/Sidebar.css';
 import { useDispatch, useSelector } from 'react-redux';
 import useAuth from '../../Auth/hooks/auth';
 import { setTheme } from '../../Auth/state/auth.state';
+import { clearTemp, setActiveConvoID } from '../state/conversation.state';
 
-const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv }) => {
+const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv, setIsChatActive }) => {
     const { logout } = useAuth()
     const dispatch = useDispatch()
     const [isDark, setIsDark] = useState(false);
@@ -25,6 +26,13 @@ const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv }) => {
         localStorage.setItem('theme', newTheme);
         document.documentElement.setAttribute('data-theme', newTheme);
     };
+
+    const handleConv = (id) => {
+        dispatch(clearTemp())
+        dispatch(setActiveConvoID(id))
+        setIsChatActive(true)
+        onClose()
+    }
 
     const handleLogout = () => {
         logout()
@@ -54,7 +62,7 @@ const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv }) => {
                             </div> :
                                 <div className="history-list">
                                     {historyArray.map((item) => (
-                                        <div key={item._id} className="history-item">
+                                        <div key={item._id} className="history-item" onClick={() => handleConv(item._id)}>
                                             {item.title}
                                         </div>
                                     ))}

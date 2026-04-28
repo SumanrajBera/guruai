@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 
 const conversation = createSlice({
     name: "conversation",
     initialState: {
         activeConvoID: null,
         history: {},
-        chats: {}
+        chats: { "temp": [] }
     },
     reducers: {
         setActiveConvoID: (state, action) => {
@@ -23,8 +23,13 @@ const conversation = createSlice({
         },
         addChat: (state, action) => {
             const { convId, message } = action.payload
-            if (!state.chats[convId]) state.chats[convId] = [] 
-            state.chats[convId].push(message)
+            if (convId) {
+                if (!state.chats[convId]) state.chats[convId] = []
+                state.chats[convId].push(message)
+            } else {
+                if (!state.chats["temp"]) state.chats["temp"] = []
+                state.chats["temp"].push(message)
+            }
         },
         prependChats: (state, action) => {
             const { convId, messages } = action.payload
@@ -32,9 +37,18 @@ const conversation = createSlice({
         },
         updateHistory: (state, action) => {
             state.history[action.payload.id].updatedAt = action.payload.updatedAt
+        },
+        clearTemp: (state) => {
+            state.chats["temp"] = []
         }
     }
 })
 
-export const { setActiveConvoID, clearActiveConvoID, setHistory, setChats, addChat, prependChats, updateHistory } = conversation.actions
+export const selectMessages = createSelector(
+    state => state.conv.chats,
+    (state, convoId) => convoId ?? "temp",
+    (chats, key) => chats[key] ?? []
+)
+
+export const { setActiveConvoID, clearActiveConvoID, setHistory, setChats, addChat, prependChats, updateHistory, clearTemp } = conversation.actions
 export default conversation.reducer

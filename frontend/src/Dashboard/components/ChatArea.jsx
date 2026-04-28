@@ -1,9 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import '../styles/ChatArea.css';
+import { useConversation } from '../hook/conversation';
+import { addChat, selectMessages } from '../state/conversation.state';
 
-const ChatArea = ({ messages, isAITyping, onSendMessage }) => {
+const ChatArea = ({ firstMessage }) => {
+    const dispatch = useDispatch()
     const [input, setInput] = useState("");
+    const [isAITyping, setIsAITyping] = useState(false)
     const messagesEndRef = useRef(null);
+    const convoId = useSelector(state => state.conv.activeConvoID)
+    const messages = useSelector(state => selectMessages(state, convoId))
+    const { fetchChatsHistory, fetchConversation } = useConversation()
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -13,9 +21,15 @@ const ChatArea = ({ messages, isAITyping, onSendMessage }) => {
         scrollToBottom();
     }, [messages, isAITyping]);
 
+    useEffect(() => {
+        if (convoId) fetchChatsHistory(convoId)
+        else fetchConversation(setIsAITyping, convoId, firstMessage)
+    }, [convoId])
+
     const handleSend = () => {
         if (input.trim() && !isAITyping) {
-            onSendMessage(input);
+            dispatch(addChat({ convId: convoId, message: { role: 'human', content: input } }))
+            fetchConversation(setIsAITyping, convoId, input)
             setInput("");
         }
     };
@@ -24,14 +38,14 @@ const ChatArea = ({ messages, isAITyping, onSendMessage }) => {
         <div className="chat-container">
             <div className="messages-area">
                 {messages.map((msg, idx) => (
-                    <div key={idx} className={`message-wrapper ${msg.sender === 'user' ? 'us' : 'ai'}`}>
-                        <div className="message-sender">{msg.sender === 'user' ? 'You' : 'GuruAI'}</div>
-                        <div className={`message ${msg.sender === 'user' ? 'us' : 'ai'}`}>
-                            {msg.text}
+                    <div key={idx} className={`message-wrapper ${msg.role === 'human' ? 'us' : 'ai'}`}>
+                        <div className="message-sender">{msg.role === 'human' ? 'You' : 'GuruAI'}</div>
+                        <div className={`message ${msg.role === 'human' ? 'us' : 'ai'}`}>
+                            {msg.content}
                         </div>
                     </div>
                 ))}
-                
+
                 {isAITyping && (
                     <div className="message-wrapper ai">
                         <div className="message-sender">GuruAI</div>
@@ -47,13 +61,13 @@ const ChatArea = ({ messages, isAITyping, onSendMessage }) => {
 
             <div className="chat-input-wrapper">
                 <div className="input-container">
-                    <input 
-                        type="text" 
-                        className="chat-input" 
+                    <input
+                        type="text"
+                        className="chat-input"
                         placeholder={isAITyping ? "GuruAI is typing..." : "Message GuruAI..."}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => { if(e.key === 'Enter') handleSend() }}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleSend() }}
                         disabled={isAITyping}
                     />
                     <button className="send-btn" onClick={handleSend} disabled={isAITyping || !input.trim()}>

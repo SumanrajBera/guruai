@@ -1,48 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
 import WelcomeArea from '../components/WelcomeArea';
 import ChatArea from '../components/ChatArea';
 import '../styles/Dashboard.css';
 import { useConversation } from '../hook/conversation'
+import { addChat, clearTemp, setActiveConvoID } from '../state/conversation.state';
 
 const Dashboard = () => {
     const user = useSelector(state => state.auth.user);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isChatActive, setIsChatActive] = useState(false);
-    const [messages, setMessages] = useState([]);
-    const [isAITyping, setIsAITyping] = useState(false);
+    const [message, setMessage] = useState([]);
     const [isFetchingConv, setisFetchingConv] = useState(false)
+    const dispatch = useDispatch()
 
     const handleNewChat = () => {
         setIsChatActive(false);
-        setMessages([]);
+        setMessage([]);
+        dispatch(setActiveConvoID(null))
+        dispatch(clearTemp())
         setIsSidebarOpen(false);
     };
 
     const handleSendPrompt = (text) => {
         setIsChatActive(true);
-        const newMsg = { sender: 'user', text };
-        setMessages([newMsg]);
-        simulateAIResponse(text);
-    };
-
-    const handleSendMessage = (text) => {
-        const newMsg = { sender: 'user', text };
-        setMessages(prev => [...prev, newMsg]);
-        simulateAIResponse(text);
-    };
-
-    const simulateAIResponse = (userText) => {
-        setIsAITyping(true);
-        setTimeout(() => {
-            const aiMsg = {
-                sender: 'ai',
-                text: `This is a simulated AI response to: "${userText}". I am using the Emerald Sage design system.`
-            };
-            setMessages(prev => [...prev, aiMsg]);
-            setIsAITyping(false);
-        }, 1500); // 1.5 second delay mock
+        const newMsg = { role: 'human', content: text };
+        setMessage([newMsg]);
+        dispatch(addChat({ message: newMsg }))
     };
 
     const toggleSidebar = () => {
@@ -62,6 +47,7 @@ const Dashboard = () => {
                 onClose={() => setIsSidebarOpen(false)}
                 onNewChat={handleNewChat}
                 isFetchingConv={isFetchingConv}
+                setIsChatActive={setIsChatActive}
             />
 
             <div className="main-content">
@@ -73,9 +59,7 @@ const Dashboard = () => {
                     <WelcomeArea username={user} onSendPrompt={handleSendPrompt} />
                 ) : (
                     <ChatArea
-                        messages={messages}
-                        isAITyping={isAITyping}
-                        onSendMessage={handleSendMessage}
+                        firstMessage={message[0]?.content}
                     />
                 )}
             </div>
