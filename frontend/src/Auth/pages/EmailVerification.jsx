@@ -12,6 +12,12 @@ export default function EmailVerification() {
   function resendEmail() {
     verfiyEmail(identifier)
   }
+
+  useEffect(() => {
+    const theme = localStorage.getItem('theme');
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [])
+
   return (
     <div className="auth-wrapper">
       <div className="auth-container verification-content">

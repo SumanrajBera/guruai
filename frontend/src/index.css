@@ -56,4 +56,18 @@ a:hover {
   opacity: 0.8;
 }
 
-
+[data-theme="dark"] {
+  --color-background: #0f1612;
+  --color-surface: #0f1612;
+  --color-surface-container: #1b261f;
+  --color-surface-low: #151d18;
+  --color-surface-lowest: #0b100d;
+  
+  --color-primary: #00a86b;
+  --color-primary-container: #006d43; 
+  --color-on-primary: #ffffff;
+  
+  --color-on-surface: #e1e8e3;
+  --color-on-surface-variant: #bccabe;
+  --color-outline: #3d4a41;
+}

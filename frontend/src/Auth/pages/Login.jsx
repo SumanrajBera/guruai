@@ -5,6 +5,7 @@ import Input from '../../components/Input';
 import '../styles/Auth.css';
 import '../styles/Login.css';
 import useAuth from '../hooks/auth';
+import { useEffect } from 'react';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -16,6 +17,11 @@ export default function Login() {
     e.preventDefault();
     loginUser(identifier, password)
   };
+
+  useEffect(() => {
+      const theme = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', theme);
+    }, [])
 
   return (
     <div className="auth-wrapper">

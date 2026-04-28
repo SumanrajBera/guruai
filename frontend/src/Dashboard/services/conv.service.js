@@ -1,0 +1,19 @@
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL: "http://localhost:3000/api/chat",
+    withCredentials: true
+})
+
+export const conversationHistory = async (lt = null) => {
+    const response = await api.get("/conversationHistory", { lt })
+    return response
+}
+
+export const newConversation = async (message, convId = null) => {
+    const response = await api.post("/conversation", {
+        message,
+        convId
+    })
+    return response
+}

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { login, register, resendMail, getMe } from "../services/auth.service";
+import { login, register, resendMail, getMe, logoutUser } from "../services/auth.service";
 import { setLoading, setUser } from "../state/auth.state";
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
@@ -50,6 +50,12 @@ const useAuth = function () {
         }
     }
 
+    async function logout() {
+        const response = await logoutUser()
+        toast.success(response.data.message);
+        navigate("/login")
+    }
+
     async function hydrate() {
         try {
             dispatch(setLoading(true))
@@ -62,7 +68,7 @@ const useAuth = function () {
         }
     }
 
-    return { registerUser, loginUser, verfiyEmail, hydrate }
+    return { registerUser, loginUser, verfiyEmail, hydrate, logout }
 }
 
 export default useAuth;

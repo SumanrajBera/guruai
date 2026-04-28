@@ -35,3 +35,9 @@ export async function getMe() {
 
     return response
 }
+
+
+export async function logoutUser() {
+    const response = await api.post("/logout")
+    return response
+}

@@ -4,11 +4,41 @@
   border-right: 1px solid var(--color-outline);
   display: flex;
   flex-direction: column;
-  padding: 16px;
   transition: transform 0.3s ease;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  padding: 24px 16px 16px 16px;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-outline);
+}
+
+.sidebar-logo img {
+  width: 32px;
+  height: 32px;
+}
+
+.sidebar-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+}
+
+.sidebar-new-chat {
+  flex: 0 0 10%;
+  display: flex;
+  align-items: center;
 }
 
 .new-chat-btn {
+  width: 100%;
   background-color: var(--color-primary);
   color: var(--color-on-primary);
   padding: 12px;
@@ -18,8 +48,6 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 24px;
-  margin-top: 40px; /* Space for the hamburger on mobile if needed, but not on desktop */
   transition: background-color 0.2s, opacity 0.2s;
   font-size: 1rem;
 }
@@ -28,7 +56,25 @@
   opacity: 0.9;
 }
 
-.history-section {
+.sidebar-history {
+  flex: 0 0 60%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: 10px;
+}
+
+.section-title {
+  padding: 0 12px;
+  font-size: 0.85rem;
+  color: var(--color-on-surface-variant);
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.history-list {
   flex: 1;
   overflow-y: auto;
   display: flex;
@@ -53,10 +99,47 @@
   color: var(--color-on-surface);
 }
 
-@media (min-width: 769px) {
-  .new-chat-btn {
-    margin-top: 0;
-  }
+.history-empty {
+  padding: 0 12px;
+  font-size: 0.85rem;
+  color: var(--color-on-surface-variant);
+}
+
+.sidebar-settings {
+  flex: 0 0 30%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-outline);
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.settings-btn {
+  background: transparent;
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-outline);
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.settings-btn:hover {
+  background-color: var(--color-surface-low);
+}
+
+.logout-btn {
+  color: #ff5252;
+  border-color: #ff5252;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 82, 82, 0.1);
 }
 
 @media (max-width: 768px) {
@@ -69,5 +152,9 @@
   }
   .sidebar.open {
     transform: translateX(0);
+  }
+  
+  .sidebar-logo {
+    padding-top: 50px; /* space for hamburger */
   }
 }

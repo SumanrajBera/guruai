@@ -5,6 +5,7 @@ import Input from '../../components/Input';
 import '../styles/Auth.css';
 import '../styles/Registration.css';
 import useAuth from '../hooks/auth'
+import { useEffect } from 'react';
 
 export default function Registration() {
   const { registerUser } = useAuth();
@@ -17,6 +18,11 @@ export default function Registration() {
     e.preventDefault();
     registerUser(username, email, password)
   };
+
+  useEffect(() => {
+    const theme = localStorage.getItem('theme');
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [])
 
   return (
     <div className="auth-wrapper">
