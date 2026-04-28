@@ -4,7 +4,8 @@ const userDets = createSlice({
     name: "user",
     initialState: {
         user: null,
-        isLoading: true
+        isLoading: true,
+        theme: localStorage.getItem("theme") || "light"
     },
     reducers: {
         setUser: (state, action) => {
@@ -15,9 +16,13 @@ const userDets = createSlice({
         },
         setLoading: (state, action) => {
             state.isLoading = action.payload
+        },
+        setTheme: (state, action) => {
+            state.theme = action.payload
+            localStorage.setItem("theme", action.payload)
         }
     }
 })
 
-export const { setUser, clearUser, setLoading } = userDets.actions
+export const { setUser, clearUser, setLoading, setTheme } = userDets.actions
 export default userDets.reducer

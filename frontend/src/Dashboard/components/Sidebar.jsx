@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Sidebar.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useAuth from '../../Auth/hooks/auth';
+import { setTheme } from '../../Auth/state/auth.state';
 
 const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv }) => {
     const { logout } = useAuth()
+    const dispatch = useDispatch()
     const [isDark, setIsDark] = useState(false);
     const history = useSelector(state => state.conv.history)
     const historyArray = Object.values(history)
@@ -19,6 +21,7 @@ const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv }) => {
     const toggleTheme = () => {
         const newTheme = isDark ? 'light' : 'dark';
         setIsDark(!isDark);
+        dispatch(setTheme(newTheme))
         localStorage.setItem('theme', newTheme);
         document.documentElement.setAttribute('data-theme', newTheme);
     };
