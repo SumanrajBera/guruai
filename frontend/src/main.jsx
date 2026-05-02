@@ -11,8 +11,11 @@ const ToastWrapper = () => {
 }
 
 createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    <App />
-    <ToastWrapper />
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+      <ToastWrapper />
+    </Provider>
+  </StrictMode>
+
 )

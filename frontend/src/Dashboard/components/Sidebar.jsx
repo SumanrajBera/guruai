@@ -5,7 +5,7 @@ import useAuth from '../../Auth/hooks/auth';
 import { setTheme } from '../../Auth/state/auth.state';
 import { clearTemp, setActiveConvoID } from '../state/conversation.state';
 
-const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv, setIsChatActive }) => {
+const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv, setIsChatActive, hasFetchedChats }) => {
     const { logout } = useAuth()
     const dispatch = useDispatch()
     const [isDark, setIsDark] = useState(false);
@@ -30,6 +30,7 @@ const Sidebar = ({ isOpen, onClose, onNewChat, isFetchingConv, setIsChatActive }
     const handleConv = (id) => {
         dispatch(clearTemp())
         dispatch(setActiveConvoID(id))
+        hasFetchedChats.current = false
         setIsChatActive(true)
         onClose()
     }

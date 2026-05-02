@@ -4,7 +4,7 @@ import '../styles/ChatArea.css';
 import { useConversation } from '../hook/conversation';
 import { addChat, selectMessages } from '../state/conversation.state';
 
-const ChatArea = ({ firstMessage }) => {
+const ChatArea = ({ firstMessage, hasFetchedChats }) => {
     const dispatch = useDispatch()
     const [input, setInput] = useState("");
     const [isAITyping, setIsAITyping] = useState(false)
@@ -22,8 +22,10 @@ const ChatArea = ({ firstMessage }) => {
     }, [messages, isAITyping]);
 
     useEffect(() => {
+        if (hasFetchedChats.current) return;
         if (convoId) fetchChatsHistory(convoId)
         else fetchConversation(setIsAITyping, convoId, firstMessage)
+        hasFetchedChats.current = true
     }, [convoId])
 
     const handleSend = () => {
@@ -38,7 +40,7 @@ const ChatArea = ({ firstMessage }) => {
         <div className="chat-container">
             <div className="messages-area">
                 {messages.map((msg, idx) => (
-                    <div key={idx} className={`message-wrapper ${msg.role === 'human' ? 'us' : 'ai'}`}>
+                    <div key={msg._id} className={`message-wrapper ${msg.role === 'human' ? 'us' : 'ai'}`}>
                         <div className="message-sender">{msg.role === 'human' ? 'You' : 'GuruAI'}</div>
                         <div className={`message ${msg.role === 'human' ? 'us' : 'ai'}`}>
                             {msg.content}

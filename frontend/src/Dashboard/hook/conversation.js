@@ -31,7 +31,7 @@ export const useConversation = function () {
             setIsAITyping(true)
             const message = input ?? tempMessages[0].content
             const response = await newConversation(message, convId)
-            const { convId: returnedId, title, updatedAt, chats } = response.data
+            const { convId: returnedId, title, updatedAt, chats, error } = response.data
 
             dispatch(setActiveConvoID(returnedId))
             chats.forEach(msg => {
@@ -44,6 +44,8 @@ export const useConversation = function () {
             } else {
                 dispatch(updateHistory({ id: returnedId, updatedAt }))
             }
+
+            if (error) toast.error(error)
         } catch (err) {
             console.log(err)
             toast.error(err.response?.data?.message || "Something Went Wrong")
