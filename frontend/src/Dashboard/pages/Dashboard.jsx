@@ -13,7 +13,6 @@ const Dashboard = () => {
     const [isChatActive, setIsChatActive] = useState(false);
     const [message, setMessage] = useState([]);
     const [isFetchingConv, setisFetchingConv] = useState(false)
-    const hasFetchedChats = useRef(false);
     const dispatch = useDispatch()
 
     const handleNewChat = () => {
@@ -49,7 +48,6 @@ const Dashboard = () => {
                 onNewChat={handleNewChat}
                 isFetchingConv={isFetchingConv}
                 setIsChatActive={setIsChatActive}
-                hasFetchedChats={hasFetchedChats}
             />
 
             <div className="main-content">
@@ -62,7 +60,6 @@ const Dashboard = () => {
                 ) : (
                     <ChatArea
                         firstMessage={message[0]?.content}
-                        hasFetchedChats={hasFetchedChats}
                     />
                 )}
             </div>

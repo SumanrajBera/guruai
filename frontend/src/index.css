@@ -3,21 +3,17 @@
   --color-background: #f4fbf3;
   --color-surface: #f4fbf3;
   --color-surface-container: #e9f0e8;
-  --color-surface-container:#ffffffb3;
+  --color-surface-container: #ffffffb3;
   --color-surface-low: #eef6ed;
   --color-surface-lowest: #ffffff;
-  
+
   --color-primary: #006d43;
   --color-primary-container: #00a86b;
   --color-on-primary: #ffffff;
-  
+
   --color-on-surface: #161d18;
   --color-on-surface-variant: #3d4a41;
   --color-outline: #bccabe;
-
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-  color: var(--color-on-surface);
-  background-color: var(--color-background);
 }
 
 * {
@@ -33,6 +29,8 @@ body {
   min-height: 100vh;
   /* Soft background gradient */
   background: linear-gradient(135deg, var(--color-surface-low), var(--color-surface-container));
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--color-on-surface);
 }
 
 #root {
@@ -63,11 +61,11 @@ a:hover {
   --color-surface-container: #1b261f;
   --color-surface-low: #151d18;
   --color-surface-lowest: #0b100d;
-  
+
   --color-primary: #00a86b;
-  --color-primary-container: #006d43; 
+  --color-primary-container: #006d43;
   --color-on-primary: #ffffff;
-  
+
   --color-on-surface: #e1e8e3;
   --color-on-surface-variant: #bccabe;
   --color-outline: #3d4a41;

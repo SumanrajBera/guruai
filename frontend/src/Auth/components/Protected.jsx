@@ -13,8 +13,9 @@ const Protected = ({ children }) => {
         hydrate()
     }, [])
 
-    if (isLoading) return <div>Loading...</div>
-
+    if (isLoading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <p>Loading...</p>
+    </div>
     if (!user) return null
 
     return <Outlet />

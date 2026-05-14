@@ -4,7 +4,7 @@ import '../styles/ChatArea.css';
 import { useConversation } from '../hook/conversation';
 import { addChat, selectMessages } from '../state/conversation.state';
 
-const ChatArea = ({ firstMessage, hasFetchedChats }) => {
+const ChatArea = ({ firstMessage}) => {
     const dispatch = useDispatch()
     const [input, setInput] = useState("");
     const [isAITyping, setIsAITyping] = useState(false)
@@ -22,10 +22,8 @@ const ChatArea = ({ firstMessage, hasFetchedChats }) => {
     }, [messages, isAITyping]);
 
     useEffect(() => {
-        if (hasFetchedChats.current) return;
         if (convoId) fetchChatsHistory(convoId)
         else fetchConversation(setIsAITyping, convoId, firstMessage)
-        hasFetchedChats.current = true
     }, [convoId])
 
     const handleSend = () => {
