@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import '../styles/ChatArea.css';
 import { useConversation } from '../hook/conversation';
 import { addChat, selectMessages } from '../state/conversation.state';
+import Markdown from 'react-markdown'
 
-const ChatArea = ({ firstMessage}) => {
+const ChatArea = ({ firstMessage }) => {
     const dispatch = useDispatch()
     const [input, setInput] = useState("");
     const [isAITyping, setIsAITyping] = useState(false)
@@ -41,7 +42,9 @@ const ChatArea = ({ firstMessage}) => {
                     <div key={msg._id} className={`message-wrapper ${msg.role === 'human' ? 'us' : 'ai'}`}>
                         <div className="message-sender">{msg.role === 'human' ? 'You' : 'GuruAI'}</div>
                         <div className={`message ${msg.role === 'human' ? 'us' : 'ai'}`}>
-                            {msg.content}
+                            <Markdown>
+                                {msg.content}
+                            </Markdown>
                         </div>
                     </div>
                 ))}
