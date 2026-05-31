@@ -114,9 +114,7 @@ export const verifyEmailController = async (req, res) => {
         /**
          * @change When Frontend works change this
          */
-        return res.status(200).json({
-            message: "Email verified"
-        })
+        return res.redirect("http://localhost:5173/login")
 
     } catch (error) {
         return res.status(500).json({
