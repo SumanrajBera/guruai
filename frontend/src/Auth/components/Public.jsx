@@ -4,7 +4,7 @@ import useAuth from '../hooks/auth'
 import { Navigate, Outlet } from 'react-router-dom'
 import { setLoading } from '../state/auth.state'
 
-const Protected = ({ children }) => {
+const Public = ({ children }) => {
     const dispatch = useDispatch()
     const { hydrate } = useAuth()
     const user = useSelector(state => state.auth.user)
@@ -16,9 +16,9 @@ const Protected = ({ children }) => {
     if (isLoading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <p>Loading...</p>
     </div>
-    if (!user) return <Navigate to="/login" replace />
+    if (user) return <Navigate to="/dashboard" replace />
 
     return <Outlet />
 }
 
-export default Protected
+export default Public

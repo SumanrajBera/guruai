@@ -3,10 +3,12 @@ import { chatHistory, conversationHistory, newConversation } from "../services/c
 import { setLoading } from "../../Auth/state/auth.state"
 import { toast } from "react-toastify"
 import { addChat, clearTemp, prependChats, setActiveConvoID, setChats, setHistory, updateHistory } from "../state/conversation.state"
+import { useRef } from "react"
 
 export const useConversation = function () {
     const dispatch = useDispatch()
     const tempMessages = useSelector(state => state.conv.chats["temp"])
+    const fetchConversationRef = useRef(false)
 
     async function fetchConversationHistory(fetching) {
         try {
@@ -28,29 +30,35 @@ export const useConversation = function () {
 
     async function fetchConversation(setIsAITyping, convId = null, input = null) {
         try {
-            setIsAITyping(true)
-            const message = input ?? tempMessages[0].content
-            const response = await newConversation(message, convId)
-            const { convId: returnedId, title, updatedAt, chats, error } = response.data
+            if (!fetchConversationRef.current) {
+                fetchConversationRef.current = true
+                setIsAITyping(true)
+                const message = input ?? tempMessages[0].content
+                const response = await newConversation(message, convId)
+                const { convId: returnedId, title, updatedAt, chats, error } = response.data
 
-            dispatch(setActiveConvoID(returnedId))
-            chats.forEach(msg => {
-                if (msg.role !== 'human') dispatch(addChat({ convId: returnedId, message: msg }))
-            })
+                dispatch(setActiveConvoID(returnedId))
+                chats.forEach(msg => {
+                    if (msg.role !== 'human') dispatch(addChat({ convId: returnedId, message: msg }))
+                })
 
-            if (!convId) {
-                dispatch(clearTemp())
-                dispatch(setHistory({ [returnedId]: { _id: returnedId, title, updatedAt } }))
-            } else {
-                dispatch(updateHistory({ id: returnedId, updatedAt }))
+                if (!convId) {
+                    dispatch(clearTemp())
+                    dispatch(setHistory({ [returnedId]: { _id: returnedId, title, updatedAt } }))
+                } else {
+                    dispatch(updateHistory({ id: returnedId, updatedAt }))
+                }
+
+                if (error) toast.error(error)
+
+                setIsAITyping(false)
+                fetchConversationRef.current = false
             }
-
-            if (error) toast.error(error)
         } catch (err) {
             console.log(err)
             toast.error(err.response?.data?.message || "Something Went Wrong")
-        } finally {
             setIsAITyping(false)
+            fetchConversationRef.current = false
         }
     }
 

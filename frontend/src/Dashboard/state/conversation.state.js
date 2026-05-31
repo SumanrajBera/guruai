@@ -40,6 +40,11 @@ const conversation = createSlice({
         },
         clearTemp: (state) => {
             state.chats["temp"] = []
+        },
+        resetState: (state) => {
+            state.activeConvoID = null
+            state.history = {}
+            state.chats = { "temp": [] }
         }
     }
 })
@@ -50,5 +55,5 @@ export const selectMessages = createSelector(
     (chats, key) => chats[key] ?? []
 )
 
-export const { setActiveConvoID, clearActiveConvoID, setHistory, setChats, addChat, prependChats, updateHistory, clearTemp } = conversation.actions
+export const { setActiveConvoID, clearActiveConvoID, setHistory, setChats, addChat, prependChats, updateHistory, clearTemp, resetState } = conversation.actions
 export default conversation.reducer

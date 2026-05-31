@@ -3,6 +3,7 @@ import { login, register, resendMail, getMe, logoutUser } from "../services/auth
 import { setLoading, setUser } from "../state/auth.state";
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom";
+import { resetState } from "../../Dashboard/state/conversation.state";
 
 const useAuth = function () {
     const dispatch = useDispatch()
@@ -52,6 +53,7 @@ const useAuth = function () {
 
     async function logout() {
         const response = await logoutUser()
+        dispatch(resetState())
         toast.success(response.data.message);
         navigate("/login")
     }
@@ -62,7 +64,7 @@ const useAuth = function () {
             const response = await getMe()
             dispatch(setUser(response.data.username))
         } catch (err) {
-            navigate("/login")
+            dispatch(setUser(null))
         } finally {
             dispatch(setLoading(false))
         }

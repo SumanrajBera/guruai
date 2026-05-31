@@ -4,6 +4,7 @@ import Registration from "../Auth/pages/Registration";
 import EmailVerification from "../Auth/pages/EmailVerification";
 import Dashboard from "../Dashboard/pages/Dashboard";
 import Protected from "../Auth/components/Protected";
+import Public from "../Auth/components/Public";
 
 const router = createBrowserRouter([
     {
@@ -20,16 +21,21 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: '/login',
-        element: <Login />,
-    },
-    {
-        path: '/register',
-        element: <Registration />,
-    },
-    {
-        path: '/verify-email/:identifier',
-        element: <EmailVerification />,
+        element: <Public />,
+        children: [
+            {
+                path: '/login',
+                element: <Login />,
+            },
+            {
+                path: '/register',
+                element: <Registration />,
+            },
+            {
+                path: '/verify-email/:identifier',
+                element: <EmailVerification />,
+            }
+        ]
     }
 ]);
 

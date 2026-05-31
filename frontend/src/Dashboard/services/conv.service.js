@@ -18,7 +18,6 @@ export const newConversation = async (message, convId = null) => {
     return response
 }
 
-
 export const chatHistory = async (convId, lt = null) => {
     const response = await api.get("/chatHistory", {
         params: {
