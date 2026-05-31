@@ -4,11 +4,13 @@ import { setLoading } from "../../Auth/state/auth.state"
 import { toast } from "react-toastify"
 import { addChat, clearTemp, prependChats, setActiveConvoID, setChats, setHistory, updateHistory } from "../state/conversation.state"
 import { useRef } from "react"
+import { useNavigate } from "react-router-dom"
 
 export const useConversation = function () {
     const dispatch = useDispatch()
     const tempMessages = useSelector(state => state.conv.chats["temp"])
     const fetchConversationRef = useRef(false)
+    const navigate = useNavigate()
 
     async function fetchConversationHistory(fetching) {
         try {
@@ -22,7 +24,11 @@ export const useConversation = function () {
             dispatch(setHistory(historyMap))
             // dispatch(setHistory(response.data.conversations))
         } catch (err) {
-            toast.error(err.response?.data?.message || "Something Went Wrong")
+            if (err.response?.status === 401) {
+                navigate("/login")
+            } else {
+                toast.error(err.response?.data?.message || "Something Went Wrong")
+            }
         } finally {
             fetching(false)
         }
@@ -33,7 +39,12 @@ export const useConversation = function () {
             if (!fetchConversationRef.current) {
                 fetchConversationRef.current = true
                 setIsAITyping(true)
-                const message = input ?? tempMessages[0].content
+                const message = input ?? tempMessages?.[0]?.content
+                if (!message) {
+                    setIsAITyping(false)
+                    fetchConversationRef.current = false
+                    return
+                }
                 const response = await newConversation(message, convId)
                 const { convId: returnedId, title, updatedAt, chats, error } = response.data
 
@@ -55,8 +66,11 @@ export const useConversation = function () {
                 fetchConversationRef.current = false
             }
         } catch (err) {
-            console.log(err)
-            toast.error(err.response?.data?.message || "Something Went Wrong")
+            if (err.response?.status === 401) {
+                navigate("/login")
+            } else {
+                toast.error(err.response?.data?.message || "Something Went Wrong")
+            }
             setIsAITyping(false)
             fetchConversationRef.current = false
         }
@@ -72,7 +86,11 @@ export const useConversation = function () {
                 dispatch(setChats({ convId, messages: chats }))
             }
         } catch (err) {
-            toast.error(err.response?.data?.message || "Something Went Wrong")
+            if (err.response?.status === 401) {
+                navigate("/login")
+            } else {
+                toast.error(err.response?.data?.message || "Something Went Wrong")
+            }
         }
     }
 

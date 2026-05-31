@@ -40,6 +40,13 @@ const Dashboard = () => {
         fetchConversationHistory(setisFetchingConv)
     }, [])
 
+    useEffect(() => {
+        if (!user) {
+            setIsChatActive(false)
+            setMessage([])
+        }
+    }, [user])
+
     return (
         <div className="dashboard-container">
             <Sidebar
@@ -55,7 +62,7 @@ const Dashboard = () => {
                     ☰ Menu
                 </button>
 
-                {!isChatActive ? (
+                {!isChatActive || !user ? (
                     <WelcomeArea username={user} onSendPrompt={handleSendPrompt} />
                 ) : (
                     <ChatArea

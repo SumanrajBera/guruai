@@ -101,20 +101,12 @@ export const verifyEmailController = async (req, res) => {
             message: "Please register! As such user doesn't exist"
         })
 
-        /**
-         * @change When Frontend works change this
-         */
-        if (user.isVerified) return res.status(400).json({
-            message: "Email already verified"
-        })
+        if (user.isVerified) return res.redirect("/login")
 
         user.isVerified = true
         await user.save()
 
-        /**
-         * @change When Frontend works change this
-         */
-        return res.redirect("http://localhost:5173/login")
+        return res.redirect("/login")
 
     } catch (error) {
         return res.status(500).json({

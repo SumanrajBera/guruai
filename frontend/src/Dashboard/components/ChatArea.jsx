@@ -24,7 +24,7 @@ const ChatArea = ({ firstMessage }) => {
 
     useEffect(() => {
         if (convoId) fetchChatsHistory(convoId)
-        else fetchConversation(setIsAITyping, convoId, firstMessage)
+        else if (firstMessage) fetchConversation(setIsAITyping, convoId, firstMessage)
     }, [convoId])
 
     const handleSend = () => {
@@ -43,7 +43,7 @@ const ChatArea = ({ firstMessage }) => {
                         <div className="message-sender">{msg.role === 'human' ? 'You' : 'GuruAI'}</div>
                         <div className={`message ${msg.role === 'human' ? 'us' : 'ai'}`}>
                             <Markdown>
-                                {msg.content}
+                                {msg.content ?? ''}
                             </Markdown>
                         </div>
                     </div>

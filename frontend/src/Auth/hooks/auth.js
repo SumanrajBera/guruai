@@ -52,10 +52,14 @@ const useAuth = function () {
     }
 
     async function logout() {
-        const response = await logoutUser()
-        dispatch(resetState())
-        toast.success(response.data.message);
-        navigate("/login")
+        try {
+            const response = await logoutUser()
+            toast.success(response.data.message)
+            navigate("/login")
+            dispatch(resetState())
+        } catch (error) {
+            toast.error("Logout failed")
+        }
     }
 
     async function hydrate() {

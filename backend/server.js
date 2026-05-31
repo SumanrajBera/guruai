@@ -1,7 +1,15 @@
 import app from "./src/app.js";
 import connectToDB from "./src/config/database.js";
 
+const PORT = process.env.PORT || 3000;
+
 connectToDB()
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
-})
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error("Failed to connect to database:", err);
+        process.exit(1);
+    });
