@@ -2,19 +2,15 @@ import { config } from "../config/config.js";
 import transporter from "../service/mail.service.js";
 import jwt from 'jsonwebtoken'
 
+
 async function sendEmail(user) {
-    const email = user.email;
-
-    const emailToken = jwt.sign({
-        email
-    }, config.JWT_SECRET)
-
+    const emailToken = jwt.sign({ email: user.email }, config.JWT_SECRET)
     const verificationLink = `${process.env.CLIENT_URL}/api/auth/verify-email?token=${emailToken}`
 
-    const mail = await transporter.sendMail({
-        from: config.GOOGLE_USER,
-        to: email,
-        subject: "Welcome to GuruAI | Verify Your Email",
+    await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: user.email,
+        subject: 'Welcome to GuruAI | Verify Your Email',
         html: getVerificationEmailTemplate(user.username, verificationLink)
     })
 }
