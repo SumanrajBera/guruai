@@ -5,6 +5,7 @@ import EmailVerification from "../Auth/pages/EmailVerification";
 import Dashboard from "../Dashboard/pages/Dashboard";
 import Protected from "../Auth/components/Protected";
 import Public from "../Auth/components/Public";
+import ErrorPage from "../Auth/components/ErrorPage";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
                 element: <EmailVerification />,
             }
         ]
+    },
+    {
+        path: "*",          
+        element: <ErrorPage />
     }
 ]);
 
