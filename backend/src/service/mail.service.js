@@ -1,5 +1,10 @@
 import nodemailer from 'nodemailer'
 import { config } from '../config/config.js'
+import dns from "node:dns";
+
+dns.lookup("smtp.gmail.com", { all: true }, (err, addresses) => {
+    console.log(addresses);
+});
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -9,11 +14,8 @@ const transporter = nodemailer.createTransport({
         user: config.GOOGLE_USER,
         pass: config.GOOGLE_APP_PASSWORD
     },
-    tls: {
-        rejectUnauthorized: false
-    },
-    socket: {
-        family: 4
+    dnsLookup(hostname, options, callback) {
+        dns.lookup(hostname, { ...options, family: 4 }, callback);
     }
 })
 
