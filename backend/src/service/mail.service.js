@@ -2,14 +2,16 @@ import nodemailer from 'nodemailer'
 import { config } from '../config/config.js'
 import dns from "node:dns";
 
+dns.setDefaultResultOrder("ipv4first");
 dns.lookup("smtp.gmail.com", { all: true }, (err, addresses) => {
-    console.log(addresses);
+    console.log("DNS:", addresses);
 });
+console.log(process.version)
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
     auth: {
         user: config.GOOGLE_USER,
         pass: config.GOOGLE_APP_PASSWORD
