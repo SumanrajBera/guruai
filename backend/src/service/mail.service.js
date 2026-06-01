@@ -8,7 +8,7 @@ dns.lookup("smtp.gmail.com", { all: true }, (err, addresses) => {
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
+    port: 465,
     secure: false,
     auth: {
         user: config.GOOGLE_USER,
