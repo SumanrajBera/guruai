@@ -7,7 +7,8 @@ const transporter = nodemailer.createTransport({
         // APP PASSWORD METHOD
         user: config.GOOGLE_USER,
         pass: config.GOOGLE_APP_PASSWORD
-    }
+    },
+    family: 4
 })
 
 try {
