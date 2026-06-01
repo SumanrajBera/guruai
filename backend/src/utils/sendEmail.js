@@ -9,7 +9,7 @@ async function sendEmail(user) {
         email
     }, config.JWT_SECRET)
 
-    const verificationLink = `http://localhost:3000/api/auth/verify-email?token=${emailToken}`
+    const verificationLink = `${process.env.CLIENT_URL}/api/auth/verify-email?token=${emailToken}`
 
     const mail = await transporter.sendMail({
         from: config.GOOGLE_USER,
