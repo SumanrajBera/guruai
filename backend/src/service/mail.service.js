@@ -12,6 +12,7 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
+    connectionTimeout: 30000,
     auth: {
         user: config.GOOGLE_USER,
         pass: config.GOOGLE_APP_PASSWORD
