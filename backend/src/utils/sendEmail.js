@@ -8,7 +8,7 @@ async function sendEmail(user) {
     const verificationLink = `${process.env.CLIENT_URL}/api/auth/verify-email?token=${emailToken}`
 
     await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: 'guruai@berasumanraj.xyz',
         to: user.email,
         subject: 'Welcome to GuruAI | Verify Your Email',
         html: getVerificationEmailTemplate(user.username, verificationLink)
