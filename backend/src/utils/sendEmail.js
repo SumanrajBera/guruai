@@ -1,5 +1,5 @@
 import { config } from "../config/config.js";
-import transporter from "../service/mail.service.js";
+import resend from "../service/mail.service.js";
 import jwt from 'jsonwebtoken'
 
 
