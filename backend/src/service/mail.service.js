@@ -2,14 +2,15 @@ import nodemailer from 'nodemailer'
 import { config } from '../config/config.js'
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    family: 4,
     auth: {
-        // APP PASSWORD METHOD
         user: config.GOOGLE_USER,
         pass: config.GOOGLE_APP_PASSWORD
-    },
-    family: 4
-})
+    }
+});
 
 try {
     await transporter.verify()
