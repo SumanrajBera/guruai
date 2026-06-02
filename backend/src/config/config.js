@@ -21,6 +21,9 @@ if (!process.env.RESEND_API_KEY) {
     throw new Error("RESEND_API_KEY is not available in the environment variable")
 }
 
+if (!process.env.NODE_ENV) {
+    throw new Error("NODE_ENV is not available in the environment variable")
+}
 
 export const config = {
     MONGO_URI: process.env.MONGO_URI,
